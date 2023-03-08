@@ -15,3 +15,14 @@ class Colors {
 
 let colors = Colors()
 let myColor = colors.color(1)
+
+let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 600))
+PlaygroundPage.current.liveView = view
+view.backgroundColor = UIColor.orange
+
+let button = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 400))
+button.setTitle("Color Choice", for: .normal)
+button.backgroundColor = UIColor.darkGray
+view.addSubview(button)
+
+
