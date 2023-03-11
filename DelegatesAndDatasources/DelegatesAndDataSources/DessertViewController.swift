@@ -8,9 +8,14 @@
 
 import UIKit
 
+protocol DessertViewControllerDelegate {
+    func didChooseDessert(dessert:OrderItem)
+}
+
 class DessertViewController: UIViewController {
     var lastSelection = ""
     var dessert = OrderItem()
+    var delegate:DessertViewControllerDelegate! = nil
     @IBOutlet weak var dessertSelection: UILabel!
     
     
@@ -25,6 +30,7 @@ class DessertViewController: UIViewController {
    
     
     @IBAction func doneButon(_ sender: UIButton) {
+        delegate.didChooseDessert(dessert: dessert)
         navigationController?.popViewController(animated: true)
     }
    
