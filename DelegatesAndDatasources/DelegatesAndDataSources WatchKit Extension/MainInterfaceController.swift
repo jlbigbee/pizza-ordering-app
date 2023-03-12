@@ -14,6 +14,14 @@ class MainInterfaceController: WKInterfaceController {
     var orderItem = OrderItem()
     @IBOutlet var dessertSelectionLabel: WKInterfaceLabel!
     
+    override func contextForSegue(withIdentifier segueIdentifier: String) -> Any? {
+        var context: [String:Any]! = nil
+        if segueIdentifier == "dessert" {
+            context = ["selection": "Desserts"]
+        }
+        return context 
+    }
+    
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         

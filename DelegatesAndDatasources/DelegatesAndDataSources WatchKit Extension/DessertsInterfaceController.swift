@@ -38,6 +38,11 @@ class DessertsInterfaceController: WKInterfaceController {
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         // Configure interface objects here.
+        if let contextDictionary = context as? [String:Any]{
+            if let selection = contextDictionary["selection"] as? String {
+                selectedLabel.setText(selection)
+            }
+        }
     }
 
 }
