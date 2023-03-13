@@ -10,14 +10,16 @@ import WatchKit
 import Foundation
 
 
-class MainInterfaceController: WKInterfaceController {
+class MainInterfaceController: WKInterfaceController, DessertsInterfaceControllerDelegate {
+    
+    
     var orderItem = OrderItem()
     @IBOutlet var dessertSelectionLabel: WKInterfaceLabel!
     
     override func contextForSegue(withIdentifier segueIdentifier: String) -> Any? {
         var context: [String:Any]! = nil
         if segueIdentifier == "dessert" {
-            context = ["selection": "Desserts"]
+            context = ["selection": "Desserts", "delegate":self]
         }
         return context 
     }
@@ -32,5 +34,13 @@ class MainInterfaceController: WKInterfaceController {
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
+    }
+    
+    
+    // delegates
+    
+    func didFinishSelectingDessert(item: OrderItem) {
+        orderItem = item
+        dessertSelectionLabel.setText(orderItem.itemString())
     }
 }

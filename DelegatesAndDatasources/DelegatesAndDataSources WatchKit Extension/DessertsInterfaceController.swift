@@ -9,10 +9,15 @@
 import WatchKit
 import Foundation
 
+protocol DessertsInterfaceControllerDelegate {
+    func didFinishSelectingDessert(item:OrderItem)
+}
 
 class DessertsInterfaceController: WKInterfaceController {
     
     var orderItem = OrderItem()
+    var delegate:DessertsInterfaceControllerDelegate! = nil
+
     
     @IBOutlet var selectedLabel: WKInterfaceLabel!
     @IBAction func mangoKeyLimeButton() {
@@ -32,6 +37,7 @@ class DessertsInterfaceController: WKInterfaceController {
     func buttonPressed(title:String){
         orderItem.itemName = title
         selectedLabel.setText(title)
+        delegate.didFinishSelectingDessert(item: orderItem)
         pop()
     }
     
@@ -41,6 +47,9 @@ class DessertsInterfaceController: WKInterfaceController {
         if let contextDictionary = context as? [String:Any]{
             if let selection = contextDictionary["selection"] as? String {
                 selectedLabel.setText(selection)
+            }
+            if let delegate = contextDictionary["delegate"] as? DessertsInterfaceControllerDelegate {
+                self.delegate = delegate
             }
         }
     }
