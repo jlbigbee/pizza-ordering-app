@@ -5,19 +5,32 @@ protocol ColorChooserDelegate{
     func selectedColor(color:Int)
 }
 
+protocol ColorChooserDataSource{
+    func numberOfColors() -> Int
+    func nameOfColor(for index:Int) -> String
+    func colorOfColor(for index:Int) -> UIColor
+}
+
 class Colors {
+    var dataSource:ColorChooserDataSource! = nil
     var colorIndex = 0
-    let colorName = ["red", "green", "blue", "purple"]
-    private let color = [UIColor.red, UIColor.green, UIColor.blue, UIColor.purple]
+    var colorName = ["red", "green", "blue", "purple"]
+    var color = [UIColor.red, UIColor.green, UIColor.blue, UIColor.purple]
     func name (_ index:Int) -> String {
-        return colorName[index % colorName.count]
+//        return colorName[index % colorName.count]
+        colorIndex = index % dataSource.numberOfColors()
+        return dataSource.nameOfColor(for: colorIndex)
     }
     func color(_ index:Int) -> UIColor {
-        return color[index % color.count]
+//        return color[index % color.count]
+        colorIndex = index % dataSource.numberOfColors()
+        return dataSource.colorOfColor(for: colorIndex)
     }
 }
 
-class ColorChooserVC:UIViewController{
+class ColorChooserVC:UIViewController, ColorChooserDataSource{
+    var colorName = ["red", "green", "blue", "purple"]
+    var color = [UIColor.red, UIColor.green, UIColor.blue, UIColor.purple]
     var colors = Colors()
     var currentColor = 0
     var delegate:ColorChooserDelegate! = nil
@@ -28,6 +41,7 @@ class ColorChooserVC:UIViewController{
         dismiss(animated: true, completion: nil)
     }
     override func viewDidLoad() {
+        colors.dataSource = self
         let chooser = UISegmentedControl(items: colors.colorName)
         chooser.frame = CGRect(x: 0, y: 0, width: 300, height: 100)
         chooser.addTarget(self, action: #selector(chooser(sender:)), for: .valueChanged)
@@ -36,10 +50,25 @@ class ColorChooserVC:UIViewController{
         view.backgroundColor = colors.color(currentColor)
         
     }
+    func numberOfColors() -> Int {
+        return colorName.count
+    }
+    
+    func nameOfColor(for index: Int) -> String {
+        return colorName[index]
+    }
+    
+    func colorOfColor(for index: Int) -> UIColor {
+        return color[index]
+    }
 }
 
         
-class ViewController: UIViewController, ColorChooserDelegate{
+class ViewController: UIViewController, ColorChooserDelegate, ColorChooserDataSource {
+   
+    
+    var colorName = ["red", "green", "blue", "purple"]
+    var color = [UIColor.red, UIColor.green, UIColor.blue, UIColor.purple]
     func selectedColor(color: Int) {
         count = color
         view.backgroundColor = colors.color(color)
@@ -58,6 +87,7 @@ class ViewController: UIViewController, ColorChooserDelegate{
         
     }
     override func viewDidLoad() {
+        colors.dataSource = self
         view.backgroundColor = UIColor.orange
         button.setTitle("Color Choice", for: .normal)
         button.backgroundColor = UIColor.darkGray
@@ -65,10 +95,22 @@ class ViewController: UIViewController, ColorChooserDelegate{
         view.addSubview(button)
         
     }
+    // Delegates and DataSources
+    func numberOfColors() -> Int {
+        return colorName.count
+    }
+    
+    func nameOfColor(for index: Int) -> String {
+        return colorName[index]
+    }
+    
+    func colorOfColor(for index: Int) -> UIColor {
+        return color[index]
+    }
 }
 
-let colors = Colors()
-let myColor = colors.color(1)
+//let colors = Colors()
+//let myColor = colors.color(1)
 
 //let view = UIView(frame: CGRect(x: 0, y: 0, width: 400, height: 600))
 PlaygroundPage.current.liveView = ViewController()
